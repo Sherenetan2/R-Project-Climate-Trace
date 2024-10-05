@@ -3,6 +3,7 @@
 
 #### Setting directory and importing the .csv data ####
 setwd("C:/Users/ether/OneDrive - National University of Singapore/PP5531 Introduction to Coding for Public Policy using R/Group Project/Climate TRACE data/forestry_and_land_use/DATA") forest_clearing_emissions \<- read.csv('forest-land-clearing_country_emissions.csv')
+forest_clearing_CO2emissions_asia <- read.csv("forest-land-clearing_country_emissions.csv")
 View(forest_clearing_emissions)
 
 
