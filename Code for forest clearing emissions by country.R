@@ -34,7 +34,7 @@ forest_clearing_CO2emissions_asia <- forest_clearing_emissions %>%
 
 ## double checking if all the selected Asian countries are included ##
 unique(forest_clearing_emissions_asia$iso3_country)
-unique_count = unique(forest_clearing_emissions_asia$iso3_country)
+unique_count <- unique(forest_clearing_emissions_asia$iso3_country)
 length(unique_count)
 
 # we have 14 countries i.e. all countries have data here
@@ -64,7 +64,7 @@ ggplot(forest_clearing_CO2emissions_asia, aes(year, emissions_quantity, color = 
   theme_minimal()
 
 
-#### If we want to combine ASEAN countries together (since their emissions are so little) ####
+#### EXTRA OPTION: If we want to combine ASEAN countries together (since their emissions are so little) ####
 
 forest_clearing_CO2emissions_asia_2 <- forest_clearing_emissions %>%
   filter(iso3_country %in% asian_countries) %>%
