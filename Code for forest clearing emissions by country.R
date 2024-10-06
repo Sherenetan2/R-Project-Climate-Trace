@@ -250,7 +250,7 @@ net_forest_emissions <- read.csv('net-forest-land_country_emissions.csv')
 View(net_forest_emissions)
 
 #### Library the following packages ####
-***use ctrl + +shift + c to comment/uncomment codes***
+## use ctrl + +shift + c to comment/uncomment codes ##
 # install.packages(dplyr)
 # install.packages(ggplot2)
 # install.packages(lubridate)
@@ -365,7 +365,7 @@ shrub_fire_emissions <- read.csv('shrubgrass-fires_country_emissions.csv')
 View(shrub_fire_emissions)
 
 #### Library the following packages ####
-***use ctrl + +shift + c to comment/uncomment codes***
+## use ctrl + +shift + c to comment/uncomment codes ##
 # install.packages(dplyr)
 # install.packages(ggplot2)
 # install.packages(lubridate)
@@ -403,8 +403,8 @@ shrub_fire_emissions_asia <- shrub_fire_emissions_asia %>%
          year = year(start_time)
   )
 
-View(shrub_degradation_emissions_asia)
 
+View(shrub_degradation_emissions_asia)
 
 ##### Visualising the data #####
 
@@ -422,3 +422,143 @@ ggplot(shrub_fire_emissions_asia, aes(year, emissions_quantity, color = iso3_cou
   labs(x = "Year", y = "Emissions Quantity", title = "Emissions from Shrubgrass Fire by Asian Countries Over Time") +
   theme_minimal()
 
+
+
+
+
+###### EMISSIONS FROM RESERVOIRS BY COUNTRY ######
+
+## this dataset is missing CO2 data from Brunei(BRN) and Cambodia(KHM)!!!
+
+
+#### Setting directory and importing the .csv data ####
+
+# setwd("C:/Users/ether/OneDrive - National University of Singapore/PP5531 Introduction to Coding for Public Policy using R/Group Project/Climate TRACE data/forestry_and_land_use/DATA")
+reservoir_emissions <- read.csv('water-reservoirs_country_emissions.csv')
+View(reservoir_emissions)
+
+#### Library the following packages ####
+## use ctrl + +shift + c to comment/uncomment codes##
+  # install.packages(dplyr)
+  # install.packages(ggplot2)
+  # install.packages(lubridate)
+  # install.packages("ggthemes")
+  
+  # can skip to this part if you already have the packages #
+  # library(dplyr)
+  # library(ggplot2)
+  # library(lubridate)
+  # library(ggthemes)
+  
+  
+  #### Filtering for CO2 emissions in ASEAN and select East Asian, South Asian countries ####
+
+# ASEAN <- c('THA', 'MYS', 'IDN', 'SGP', 'PHL', 'BRN', 'VNM', 'KHM', 'MMR', 'LAO')
+# East_Asia <- c('CHN', 'JPN', 'KOR')
+# South_Asia <- c('IND')
+
+# asian_countries <- c(ASEAN, East_Asia, South_Asia)
+
+reservoir_emissions_asia <- reservoir_emissions %>%
+  filter(iso3_country %in% asian_countries) %>%
+  filter(gas == "co2")
+
+
+## double checking if all the selected Asian countries are included ##
+unique_count <- unique(reservoir_emissions_asia$iso3_country)
+length(unique_count)
+
+# We only have 12 countries here (BRN and KHM are missing)
+
+## creating dummy variable for year for easy graph plotting ##
+reservoir_emissions_asia <- reservoir_emissions_asia %>%
+  mutate(start_time = as.Date(start_time),
+         year = year(start_time)
+  )
+
+View(reservoir_emissions_asia)
+
+
+##### Visualising the data #####
+
+# as a bar chart #
+ggplot(reservoir_emissions_asia, aes(iso3_country, emissions_quantity, fill = factor(year))) + 
+  geom_col() +
+  labs(x = "Asian country", y = "Total emissions", title = "Emissions from Shrubgrass Fire by Asian Countries") +
+  theme_minimal()
+
+# as a line graph #
+ggplot(reservoir_emissions_asia, aes(year, emissions_quantity, color = iso3_country)) + 
+  geom_line() +
+  geom_point() +
+  scale_color_manual(values = c("steelblue3", "antiquewhite4", "lightsteelblue3", "aquamarine3", "pink", "lightgoldenrod1","lightsalmon3", "gold3", "mistyrose4", "maroon", "darkorange", "lightpink3")) +
+  labs(x = "Year", y = "Emissions Quantity", title = "Emissions from Shrubgrass Fire by Asian Countries Over Time") +
+  theme_minimal()
+
+
+###### WETLANDS FIRE EMISSIONS BY COUNTRY ######
+
+
+#### Setting directory and importing the .csv data ####
+
+#setwd("C:/Users/ether/OneDrive - National University of Singapore/PP5531 Introduction to Coding for Public Policy using R/Group Project/Climate TRACE data/forestry_and_land_use/DATA") 
+wetlands_fire_emissions <- read.csv('wetland-fires_country_emissions.csv')
+View(wetlands_fire_emissions)
+
+#### Library the following packages ####
+## use ctrl + +shift + c to comment/uncomment codes ##
+# install.packages(dplyr)
+# install.packages(ggplot2)
+# install.packages(lubridate)
+# install.packages("ggthemes")
+
+# can skip to this part if you already have the packages #
+# library(dplyr)
+# library(ggplot2)
+# library(lubridate)
+# library(ggthemes)
+
+
+#### Filtering for CO2 emissions in ASEAN and select East Asian, South Asian countries ####
+
+# ASEAN <- c('THA', 'MYS', 'IDN', 'SGP', 'PHL', 'BRN', 'VNM', 'KHM', 'MMR', 'LAO')
+# East_Asia <- c('CHN', 'JPN', 'KOR')
+# South_Asia <- c('IND')
+
+# asian_countries <- c(ASEAN, East_Asia, South_Asia)
+
+wetlands_fire_emissions_asia <- wetlands_fire_emissions %>%
+  filter(iso3_country %in% asian_countries) %>%
+  filter(gas == "co2")
+
+
+## double checking if all the selected Asian countries are included ##
+unique_count <- unique(wetlands_fire_emissions_asia$iso3_country)
+length(unique_count)
+
+# We have 14 countries i.e. all countries have data here
+
+## creating dummy variable for year for easy graph plotting ##
+wetlands_fire_emissions_asia <- wetlands_fire_emissions_asia %>%
+  mutate(start_time = as.Date(start_time),
+         year = year(start_time)
+  )
+
+
+View(wetlands_fire_emissions_asia)
+
+##### Visualising the data #####
+
+# as a bar chart #
+ggplot(wetlands_fire_emissions_asia, aes(iso3_country, emissions_quantity, fill = factor(year))) + 
+  geom_col() +
+  labs(x = "Asian country", y = "Total emissions", title = "Emissions from Wetlands Fire by Asian Countries") +
+  theme_minimal()
+
+# as a line graph #
+ggplot(wetlands_fire_emissions_asia, aes(year, emissions_quantity, color = iso3_country)) + 
+  geom_line() +
+  geom_point() +
+  scale_color_manual(values = c("darkred", "steelblue3", "antiquewhite4", "lightsteelblue3", "aquamarine3", "darkslategray4", "pink", "lightgoldenrod1","lightsalmon3", "gold3", "mistyrose4", "maroon", "darkorange", "lightpink3")) +
+  labs(x = "Year", y = "Emissions Quantity", title = "Emissions from Wetlands Fire by Asian Countries Over Time") +
+  theme_minimal()
