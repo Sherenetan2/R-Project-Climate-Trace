@@ -1,6 +1,5 @@
 ###### RICE CULTIVATION EMISSIONS (CH4) BY COUNTRY ######
-## this dataset contains mostly CH4, CO2 equivalent over 20 years, or CO2 equivalent over 100 years
-## So I have opted to analyse CH4 emissions first, due to the potency of methane in trapping heat in the atmosphere. ##
+## using CO2 equivalent over 100 years for this dataset
 
 # if you need to clear your environment #
 rm(list = ls())
@@ -32,9 +31,9 @@ South_Asia <- c('IND')
 
 asian_countries <- c(ASEAN, East_Asia, South_Asia)
 
-rice_farming_CH4emissions_asia <- rice_farming_emissions %>%
+rice_farming_CO2emissions_asia <- rice_farming_emissions %>%
   filter(iso3_country %in% asian_countries) %>%
-  filter(gas == "ch4")
+  filter(gas == "co2e_100yr")
 
 
 ## double checking if all the selected Asian countries are included ##
@@ -44,12 +43,12 @@ length(unique_count)
 # we have 14 countries i.e. all countries have data here
 
 ## creating dummy variable for year for easy graph plotting ##
-rice_farming_CH4emissions_asia <- rice_farming_CH4emissions_asia %>%
+rice_farming_CO2emissions_asia <- rice_farming_CO2emissions_asia %>%
   mutate(start_time = as.Date(start_time),
          year = year(start_time)
   )
 
-View(rice_farming_CH4emissions_asia)
+View(rice_farming_CO2emissions_asia)
 
 
 ##### Visualising the data #####
@@ -57,22 +56,21 @@ View(rice_farming_CH4emissions_asia)
 # as a bar chart #
 ggplot(rice_farming_CH4emissions_asia, aes(iso3_country, emissions_quantity, fill = factor(year))) + 
   geom_col() +
-  labs(x = "Asian country", y = "Total emissions", title = "Emissions from Rice Cultivation in Select Asian countries") +
+  labs(x = "Asian country", y = "Total emissions", title = "Total CO2 (equivalent to 100 years)Emissions from Rice Cultivation in Select Asian countries") +
   theme_minimal()
 
 # as a line graph #
-ggplot(rice_farming_CH4emissions_asia, aes(year, emissions_quantity, color = iso3_country)) + 
+ggplot(rice_farming_CO2emissions_asia, aes(year, emissions_quantity, color = iso3_country)) + 
   geom_line() +
   geom_point() +
   scale_color_manual(values = c("darkred", "steelblue3", "antiquewhite4", "lightsteelblue3", "aquamarine3", "darkslategray4", "pink", "lightgoldenrod1","lightsalmon4", "gold3", "mistyrose4", "maroon", "darkorange", "lightpink3")) +
-  labs(x = "Year", y = "Emissions Quantity", title = "Emissions from Rice Cultivation in Select Asian Countries Over Time") +
+  labs(x = "Year", y = "Emissions Quantity", title = "Total CO2 (equivalent to 100 years) Emissions from Rice Cultivation\nin Select Asian Countries Over Time") +
   theme_minimal()
 
 
 
-###### CH4 EMISSIONS FROM ENTERIC FERMENTATION IN FEEDLOT COW DIGESTION BY COUNTRY ######
-## this dataset also contains mostly CH4, CO2 equivalent over 20 years, or CO2 equivalent over 100 years
-## So I have opted to analyse CH4 emissions first, due to the potency of methane in trapping heat in the atmosphere.
+###### CO2 EMISSIONS FROM ENTERIC FERMENTATION IN FEEDLOT COW DIGESTION BY COUNTRY ######
+## using CO2 equivalent over 100 years for this dataset
 
 
 # if you need to clear your environment #
@@ -97,7 +95,7 @@ library(lubridate)
 library(ggthemes)
 
 
-#### Filtering for CH4 emissions in ASEAN and select East Asian, South Asian countries ####
+#### Filtering for CO2 (equivalent to 100 years) emissions in ASEAN and select East Asian, South Asian countries ####
 
 ASEAN <- c('THA', 'MYS', 'IDN', 'SGP', 'PHL', 'BRN', 'VNM', 'KHM', 'MMR', 'LAO')
 East_Asia <- c('CHN', 'JPN', 'KOR')
@@ -107,7 +105,7 @@ asian_countries <- c(ASEAN, East_Asia, South_Asia)
 
 feedlot_cow_methane_emissions_asia <- feedlot_cow_emissions %>%
   filter(iso3_country %in% asian_countries) %>%
-  filter(gas == "ch4")
+  filter(gas == "co2e_100yr")
 
 
 ## double checking if all the selected Asian countries are included ##
@@ -130,7 +128,7 @@ View(feedlot_cow_methane_emissions_asia)
 # as a bar chart #
 ggplot(feedlot_cow_methane_emissions_asia, aes(iso3_country, emissions_quantity, fill = factor(year))) + 
   geom_col() +
-  labs(x = "Asian country", y = "Total emissions", title = "Total Methane Released by Cows in Select Asian countries") +
+  labs(x = "Asian country", y = "Total emissions", title = "Total Methane Released by Feedlot Cows in Select Asian countries") +
   theme_minimal()
 
 # as a line graph #
@@ -138,7 +136,7 @@ ggplot(feedlot_cow_methane_emissions_asia, aes(year, emissions_quantity, color =
   geom_line() +
   geom_point() +
   scale_color_manual(values = c("darkred", "steelblue3", "antiquewhite4", "lightsteelblue3", "aquamarine3", "darkslategray4", "pink", "lightgoldenrod1","lightsalmon4", "gold3", "mistyrose4", "maroon", "darkorange", "lightpink3")) +
-  labs(x = "Year", y = "Emissions Quantity", title = "Total Methane Released by Feedlot Cows in Select Asian Countries Over Time") +
+  labs(x = "Year", y = "Emissions Quantity", title = "Total CO2 (equivalent to 100 years) Released by Feedlot Cows\nin Select Asian Countries") +
   theme_minimal()
 
   # alternative colour scheme #
@@ -152,10 +150,8 @@ ggplot(cow_methane_emissions_asia, aes(year, emissions_quantity, color = iso3_co
 
 
 
-###### CH4 EMISSIONS FROM ENTERIC FERMENTATION IN PASTURE COW DIGESTION BY COUNTRY ######
-## this dataset also contains mostly CH4, CO2 equivalent over 20 years, or CO2 equivalent over 100 years
-## So I have opted to analyse CH4 emissions first, due to the potency of methane in trapping heat in the atmosphere.
-
+###### CO2 (equivalent to 100 years) EMISSIONS FROM ENTERIC FERMENTATION IN PASTURE COW DIGESTION BY COUNTRY ######
+## using CO2 equivalent over 100 years in this dataset
 
 # if you need to clear your environment #
 # rm(list = ls())
@@ -179,7 +175,7 @@ library(lubridate)
 library(ggthemes)
 
 
-#### Filtering for CH4 emissions in ASEAN and select East Asian, South Asian countries ####
+#### Filtering for CO2 (equivalent to 100 years) emissions in ASEAN and select East Asian, South Asian countries ####
 
 ASEAN <- c('THA', 'MYS', 'IDN', 'SGP', 'PHL', 'BRN', 'VNM', 'KHM', 'MMR', 'LAO')
 East_Asia <- c('CHN', 'JPN', 'KOR')
@@ -189,7 +185,7 @@ asian_countries <- c(ASEAN, East_Asia, South_Asia)
 
 pasture_cow_methane_emissions_asia <- pasture_cow_emissions %>%
   filter(iso3_country %in% asian_countries) %>%
-  filter(gas == "ch4")
+  filter(gas == "co2e_100yr")
 
 
 ## double checking if all the selected Asian countries are included ##
@@ -212,7 +208,7 @@ View(pasture_cow_methane_emissions_asia)
 # as a bar chart #
 ggplot(pasture_cow_methane_emissions_asia, aes(iso3_country, emissions_quantity, fill = factor(year))) + 
   geom_col() +
-  labs(x = "Asian country", y = "Total emissions", title = "Total Methane Released by Cows in Select Asian countries") +
+  labs(x = "Asian country", y = "Total emissions", title = "Total Methane Released by Pasture Cows in Select Asian countries") +
   theme_minimal()
 
 # as a line graph #
@@ -220,15 +216,13 @@ ggplot(pasture_cow_methane_emissions_asia, aes(year, emissions_quantity, color =
   geom_line() +
   geom_point() +
   scale_color_manual(values = c("darkred", "steelblue3", "antiquewhite4", "lightsteelblue3", "aquamarine3", "darkslategray4", "pink", "lightgoldenrod1","lightsalmon4", "gold3", "mistyrose4", "maroon", "darkorange", "lightpink3")) +
-  labs(x = "Year", y = "Emissions Quantity", title = "Total Methane Released by Feedlot Cows in Select Asian Countries Over Time") +
+  labs(x = "Year", y = "Emissions Quantity", title = "Total CO2 (equivalent to 100 years) Released by Pasture Cows\nin Select Asian Countries") +
   theme_minimal()
 
 
 
-###### CH4 EMISSIONS FROM PASTURE COW MANURE BY COUNTRY ######
-## this dataset also contains mostly CH4, CO2 equivalent over 20 years, or CO2 equivalent over 100 years
-## So I have opted to analyse CH4 emissions first, due to the potency of methane in trapping heat in the atmosphere.
-
+###### CO2 (equivalent to 100 years) EMISSIONS FROM PASTURE COW MANURE BY COUNTRY ######
+## using CO2 equivalent over 100 years in this dataset
 
 # if you need to clear your environment #
 # rm(list = ls())
@@ -252,7 +246,7 @@ library(lubridate)
 library(ggthemes)
 
 
-#### Filtering for CH4 emissions in ASEAN and select East Asian, South Asian countries ####
+#### Filtering for CO2 (equivalent to 100 years) emissions in ASEAN and select East Asian, South Asian countries ####
 
 ASEAN <- c('THA', 'MYS', 'IDN', 'SGP', 'PHL', 'BRN', 'VNM', 'KHM', 'MMR', 'LAO')
 East_Asia <- c('CHN', 'JPN', 'KOR')
@@ -262,7 +256,7 @@ asian_countries <- c(ASEAN, East_Asia, South_Asia)
 
 pasture_cow_manure_emissions_asia <- pasture_cow_manure_emissions %>%
   filter(iso3_country %in% asian_countries) %>%
-  filter(gas == "ch4")
+  filter(gas == "co2e_100yr")
 
 
 ## double checking if all the selected Asian countries are included ##
@@ -285,7 +279,7 @@ View(pasture_cow_manure_emissions_asia)
 # as a bar chart #
 ggplot(pasture_cow_manure_emissions_asia, aes(iso3_country, emissions_quantity, fill = factor(year))) + 
   geom_col() +
-  labs(x = "Asian country", y = "Total emissions", title = "Total Methane Released by Pasture Cows in Select Asian countries") +
+  labs(x = "Asian country", y = "Total emissions", title = "Total Methane Released by Pasture Cow Manure in Select Asian countries") +
   theme_minimal()
 
 # as a line graph #
@@ -293,14 +287,13 @@ ggplot(pasture_cow_manure_emissions_asia, aes(year, emissions_quantity, color = 
   geom_line() +
   geom_point() +
   scale_color_manual(values = c("darkred", "steelblue3", "antiquewhite4", "lightsteelblue3", "aquamarine3", "darkslategray4", "pink", "lightgoldenrod1","lightsalmon4", "gold3", "mistyrose4", "maroon", "darkorange", "lightpink3")) +
-  labs(x = "Year", y = "Emissions Quantity", title = "Total Methane Released by Pasture Cows in Select Asian Countries Over Time") +
+  labs(x = "Year", y = "Emissions Quantity", title = "Total CO2 (equivalent to 100 years) Released by\nPasture Cow Manure in Select Asian Countries over Time") +
   theme_minimal()
 
 
 
-###### CH4 EMISSIONS FROM FEEDLOT COW MANURE BY COUNTRY ######
-## this dataset also contains mostly CH4, CO2 equivalent over 20 years, or CO2 equivalent over 100 years
-## So I have opted to analyse CH4 emissions first, due to the potency of methane in trapping heat in the atmosphere.
+###### CO2 (equivalent to 100 years) EMISSIONS FROM FEEDLOT COW MANURE BY COUNTRY ######
+## using CO2 equivalent over 100 years for this dataset
 
 
 # if you need to clear your environment #
@@ -325,7 +318,7 @@ library(lubridate)
 library(ggthemes)
 
 
-#### Filtering for CH4 emissions in ASEAN and select East Asian, South Asian countries ####
+#### Filtering for CO2 (equivalent to 100 years) emissions in ASEAN and select East Asian, South Asian countries ####
 
 ASEAN <- c('THA', 'MYS', 'IDN', 'SGP', 'PHL', 'BRN', 'VNM', 'KHM', 'MMR', 'LAO')
 East_Asia <- c('CHN', 'JPN', 'KOR')
@@ -335,7 +328,7 @@ asian_countries <- c(ASEAN, East_Asia, South_Asia)
 
 feedlot_cow_manure_emissions_asia <- feedlot_cow_manure_emissions %>%
   filter(iso3_country %in% asian_countries) %>%
-  filter(gas == "ch4")
+  filter(gas == "co2e_100yr")
 
 
 ## double checking if all the selected Asian countries are included ##
@@ -366,7 +359,7 @@ ggplot(feedlot_cow_manure_emissions_asia, aes(year, emissions_quantity, color = 
   geom_line() +
   geom_point() +
   scale_color_manual(values = c("darkred", "steelblue3", "antiquewhite4", "lightsteelblue3", "aquamarine3", "darkslategray4", "pink", "lightgoldenrod1","lightsalmon4", "gold3", "mistyrose4", "maroon", "darkorange", "lightpink3")) +
-  labs(x = "Year", y = "Emissions Quantity", title = "Total Methane Released by Feedlot Cow Manure in Select Asian Countries Over Time") +
+  labs(x = "Year", y = "Emissions Quantity", title = "Total CO2 (equivalent to 100 years) Released by\nFeedlot Cow Manure in Select Asian Countries Over Time") +
   theme_minimal()
 
 
@@ -374,8 +367,8 @@ ggplot(feedlot_cow_manure_emissions_asia, aes(year, emissions_quantity, color = 
 
 
 ###### SYNTHETIC FERTILISER EMISSIONS BY COUNTRY ######
-## this dataset only contains CO2 equivalent over 20 years and CO2 equivalent over 100 years
-## So I have opted to analyse CO2 equivalent over 20 years emissions first.
+## using CO2 equivalent over 100 years for this dataset
+## data from Brunei and Cambodia not available in this dataset
 
 
 # if you need to clear your environment #
@@ -410,7 +403,7 @@ asian_countries <- c(ASEAN, East_Asia, South_Asia)
 
 syn_fertiliser_emissions_asia <- syn_fertiliser_emissions %>%
   filter(iso3_country %in% asian_countries) %>%
-  filter(gas == "co2e_20yr")
+  filter(gas == "co2e_100yr")
 
 
 ## double checking if all the selected Asian countries are included ##
@@ -440,8 +433,8 @@ ggplot(syn_fertiliser_emissions_asia, aes(iso3_country, emissions_quantity, fill
 ggplot(syn_fertiliser_emissions_asia, aes(year, emissions_quantity, color = iso3_country)) + 
   geom_line() +
   geom_point() +
-  scale_color_manual(values = c("darkred", "steelblue3", "antiquewhite4", "lightsteelblue3", "aquamarine3", "darkslategray4", "pink", "lightgoldenrod1","lightsalmon4", "gold3", "mistyrose4", "maroon", "darkorange", "lightpink3")) +
-  labs(x = "Year", y = "Emissions Quantity", title = "Total CO2 (equivalent over 20 years) Released by Synthetic Fertilisers in Select Asian Countries Over Time") +
+  scale_color_manual(values = c("steelblue3", "antiquewhite4", "lightsteelblue3", "aquamarine3", "pink", "lightgoldenrod1","lightsalmon4", "gold3", "mistyrose4", "maroon", "darkorange", "lightpink3")) +
+  labs(x = "Year", y = "Emissions Quantity", title = "Total CO2 (eq. over 20 years) from Synthetic Fertilisers\nin Select Asian Countries over Time") +
   theme_minimal()
 
 
@@ -485,7 +478,7 @@ asian_countries <- c(ASEAN, East_Asia, South_Asia)
 
 other_agrisoil_emissions_asia <- other_agrisoil_emissions %>%
   filter(iso3_country %in% asian_countries) %>%
-  filter(gas == "co2e_20yr")
+  filter(gas == "co2e_100yr")
 
 
 ## double checking if all the selected Asian countries are included ##
@@ -495,7 +488,7 @@ length(unique_count)
 # we have 14 countries i.e. all countries have data here
 
 ## creating dummy variable for year for easy graph plotting ##
-syn_fertiliser_emissions_asia <- syn_fertiliser_emissions_asia %>%
+other_agrisoil_emissions_asia <- other_agrisoil_emissions_asia %>%
   mutate(start_time = as.Date(start_time),
          year = year(start_time)
   )
@@ -506,15 +499,15 @@ View(syn_fertiliser_emissions_asia)
 ##### Visualising the data #####
 
 # as a bar chart #
-ggplot(syn_fertiliser_emissions_asia, aes(iso3_country, emissions_quantity, fill = factor(year))) + 
+ggplot(other_agrisoil_emissions_asia, aes(iso3_country, emissions_quantity, fill = factor(year))) + 
   geom_col() +
   labs(x = "Asian country", y = "Total emissions", title = "Total CO2 (equivalent over 20 years)  Released by Other Agricultural Soils in Select Asian countries") +
   theme_minimal()
 
 # as a line graph #
-ggplot(syn_fertiliser_emissions_asia, aes(year, emissions_quantity, color = iso3_country)) + 
+ggplot(other_agrisoil_emissions_asia, aes(year, emissions_quantity, color = iso3_country)) + 
   geom_line() +
   geom_point() +
   scale_color_manual(values = c("darkred", "steelblue3", "antiquewhite4", "lightsteelblue3", "aquamarine3", "darkslategray4", "pink", "lightgoldenrod1","lightsalmon4", "gold3", "mistyrose4", "maroon", "darkorange", "lightpink3")) +
-  labs(x = "Year", y = "Emissions Quantity", title = "Total CO2 (equivalent over 20 years)  Released by Other Agricultural Soils in Select Asian Countries Over Time") +
+  labs(x = "Year", y = "Emissions Quantity", title = "Total CO2 (equivalent over 20 years) Released by\nOther Agricultural Soils in Select Asian Countries Over Time") +
   theme_minimal()
