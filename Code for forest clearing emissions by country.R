@@ -1,6 +1,9 @@
 ###### FOREST LAND CLEARING EMISSIONS BY COUNTRY ######
 
 
+# if you need to clear your environment #
+rm(list = ls())
+
 #### Setting directory and importing the .csv data ####
 setwd("C:/Users/ether/OneDrive - National University of Singapore/PP5531 Introduction to Coding for Public Policy using R/Group Project/Climate TRACE data/forestry_and_land_use/DATA") 
 forest_clearing_emissions <- read.csv('forest-land-clearing_country_emissions.csv')
@@ -59,10 +62,10 @@ ggplot(forest_clearing_CO2emissions_asia, aes(iso3_country, emissions_quantity, 
 # as a line graph #
 ggplot(forest_clearing_CO2emissions_asia, aes(year, emissions_quantity, color = iso3_country)) + 
   geom_line() +
-  geom_point() +  
-  labs(x = "Year", y = "Emissions Quantity", title = "Emissions from Land Clearing by Country Over Time") +
+  geom_point() +
+  scale_color_manual(values = c("darkred", "steelblue3", "antiquewhite4", "lightsteelblue3", "aquamarine3", "darkslategray4", "pink", "lightgoldenrod1","lightsalmon3", "gold3", "mistyrose4", "maroon", "darkorange", "lightpink3")) +
+  labs(x = "Year", y = "Emissions Quantity", title = "Total Methane Released by Cows in Select Country Over Time") +
   theme_minimal()
-
 
 #### If we want to combine ASEAN countries together (since their emissions are so little) ####
 
@@ -85,7 +88,8 @@ ggplot(forest_clearing_CO2emissions_asia_2, aes(iso3_country, emissions_quantity
 
 ggplot(forest_clearing_CO2emissions_asia_2, aes(year, emissions_quantity, color = iso3_country)) + 
   geom_line() +
-  geom_point() +  
+  geom_point() +
+  scale_color_manual(values = c("darkred", "steelblue3", "antiquewhite4", "lightsteelblue3", "aquamarine3", "darkslategray4", "pink", "lightgoldenrod1","lightsalmon3", "gold3", "mistyrose4", "maroon", "darkorange", "lightpink3")) +
   labs(x = "Year", y = "Emissions Quantity", title = "Emissions from Land Clearing by Country Over Time") +
   theme_minimal()
 
@@ -93,7 +97,79 @@ ggplot(forest_clearing_CO2emissions_asia_2, aes(year, emissions_quantity, color 
 
 
 
-###### SOURCES OF FOREST FIRE EMISSIONS BY COUNTRY ######
+
+###### FOREST DEGRADATION EMISSIONS BY COUNTRY ######
+
+
+#### Setting directory and importing the .csv data ####
+
+#setwd("C:/Users/ether/OneDrive - National University of Singapore/PP5531 Introduction to Coding for Public Policy using R/Group Project/Climate TRACE data/forestry_and_land_use/DATA") 
+forest_degradation_emissions <- read.csv('forest-land-degradation_country_emissions.csv')
+View(forest_degradation_emissions)
+
+#### Library the following packages ####
+## use ctrl + +shift + c to comment/uncomment codes ##
+# install.packages(dplyr)
+# install.packages(ggplot2)
+# install.packages(lubridate)
+# install.packages("ggthemes")
+
+# can skip to this part if you already have the packages #
+# library(dplyr)
+# library(ggplot2)
+# library(lubridate)
+# library(ggthemes)
+
+
+#### Filtering for CO2 emissions in ASEAN and select East Asian, South Asian countries ####
+
+# ASEAN <- c('THA', 'MYS', 'IDN', 'SGP', 'PHL', 'BRN', 'VNM', 'KHM', 'MMR', 'LAO')
+# East_Asia <- c('CHN', 'JPN', 'KOR')
+# South_Asia <- c('IND')
+
+# asian_countries <- c(ASEAN, East_Asia, South_Asia)
+
+forest_degradation_emissions_asia <- forest_degradation_emissions %>%
+  filter(iso3_country %in% asian_countries) %>%
+  filter(gas == "co2")
+
+
+## double checking if all the selected Asian countries are included ##
+unique_count <- unique(forest_degradation_emissions_asia$iso3_country)
+length(unique_count)
+
+# Again, we have 14 countries i.e. all countries have data here
+
+## creating dummy variable for year for easy graph plotting ##
+forest_degradation_emissions_asia <- forest_degradation_emissions_asia %>%
+  mutate(start_time = as.Date(start_time),
+         year = year(start_time)
+  )
+
+View(forest_degradation_emissions_asia)
+
+
+##### Visualising the data #####
+
+# as a bar chart #
+ggplot(forest_degradation_emissions_asia, aes(iso3_country, emissions_quantity, fill = factor(year))) + 
+  geom_col() +
+  labs(x = "Asian country", y = "Total emissions", title = "Emissions from Forest Degradation in Asian Countries") +
+  theme_minimal()
+
+# as a line graph #
+ggplot(forest_degradation_emissions_asia, aes(year, emissions_quantity, color = iso3_country)) + 
+  geom_line() +
+  geom_point() +
+  scale_color_manual(values = c("darkred", "steelblue3", "antiquewhite4", "lightsteelblue3", "aquamarine3", "darkslategray4", "pink", "lightgoldenrod1","lightsalmon3", "gold3", "mistyrose4", "maroon", "darkorange", "lightpink3")) +
+  labs(x = "Year", y = "Emissions Quantity", title = "Emissions from Forest Degradation in Asian Countries Over Time") +
+  theme_minimal()
+  
+
+
+
+
+###### FOREST FIRE EMISSIONS BY COUNTRY ######
 
 
 #### Setting directory and importing the .csv data ####
@@ -103,7 +179,7 @@ forest_fire_emissions <- read.csv('forest-land-fires_country_emissions.csv')
 View(forest_fire_emissions)
 
 #### Library the following packages ####
-***use ctrl + +shift + c to comment/uncomment codes***
+## use ctrl + +shift + c to comment/uncomment codes ##
 # install.packages(dplyr)
 # install.packages(ggplot2)
 # install.packages(lubridate)
@@ -155,7 +231,8 @@ ggplot(forest_fire_emissions_asia, aes(iso3_country, emissions_quantity, fill = 
 # as a line graph #
 ggplot(forest_fire_emissions_asia, aes(year, emissions_quantity, color = iso3_country)) + 
   geom_line() +
-  geom_point() +  
+  geom_point() +
+  scale_color_manual(values = c("darkred", "steelblue3", "antiquewhite4", "lightsteelblue3", "aquamarine3", "darkslategray4", "pink", "lightgoldenrod1","lightsalmon3", "gold3", "mistyrose4", "maroon", "darkorange", "lightpink3")) +
   labs(x = "Year", y = "Emissions Quantity", title = "Emissions from Land Degradation by Asian Countries Over Time") +
   theme_minimal()
 
@@ -226,7 +303,8 @@ ggplot(net_forest_emissions_asia, aes(iso3_country, emissions_quantity, fill = f
 # as a line graph #
 ggplot(net_forest_emissions_asia, aes(year, emissions_quantity, color = iso3_country)) + 
   geom_line() +
-  geom_point() +  
+  geom_point() +
+  scale_color_manual(values = c("darkred", "steelblue3", "antiquewhite4", "lightsteelblue3", "aquamarine3", "darkslategray4", "pink", "lightgoldenrod1","lightsalmon3", "gold3", "mistyrose4", "maroon", "darkorange", "lightpink3")) +
   labs(x = "Year", y = "Emissions Quantity", title = "Net Forest Emissions by Asian Countries Over Time") +
   theme_minimal()
 
@@ -238,7 +316,8 @@ net_forest_emissions %>%
          year = year(start_time)) %>%
   ggplot(., aes(year, emissions_quantity, color = iso3_country)) + 
   geom_line() +
-  geom_point() +  
+  geom_point() +
+  scale_color_manual(values = c("darkred", "steelblue3", "antiquewhite4", "lightsteelblue3", "aquamarine3", "darkslategray4", "pink", "lightgoldenrod1","lightsalmon3", "gold3", "mistyrose4", "maroon", "darkorange", "lightpink3")) +
   labs(x = "Year", y = "Emissions Quantity", title = "Net Forest Emissions by Asian Countries Over Time") +
   theme_minimal()
 
@@ -250,7 +329,8 @@ net_forest_emissions %>%
          year = year(start_time)) %>%
   ggplot(., aes(year, emissions_quantity, color = iso3_country)) + 
   geom_line() +
-  geom_point() +  
+  geom_point() +
+  scale_color_manual(values = c("darkred", "steelblue3", "antiquewhite4", "lightsteelblue3", "aquamarine3", "darkslategray4", "pink", "lightgoldenrod1","lightsalmon3", "gold3", "mistyrose4", "maroon", "darkorange", "lightpink3")) +
   labs(x = "Year", y = "Emissions Quantity", title = "Net Forest Emissions by Asian Countries Over Time") +
   theme_minimal()
 
@@ -262,7 +342,8 @@ net_forest_emissions %>%
          year = year(start_time)) %>%
   ggplot(., aes(year, emissions_quantity, color = iso3_country)) + 
   geom_line() +
-  geom_point() +  
+  geom_point() +
+  scale_color_manual(values = c("darkred", "steelblue3", "antiquewhite4", "lightsteelblue3", "aquamarine3", "darkslategray4", "pink", "lightgoldenrod1","lightsalmon3", "gold3", "mistyrose4", "maroon", "darkorange", "lightpink3")) +
   labs(x = "Year", y = "Emissions Quantity", title = "Net Forest Emissions by Asian Countries Over Time") +
   theme_minimal()
 
@@ -336,7 +417,8 @@ ggplot(shrub_fire_emissions_asia, aes(iso3_country, emissions_quantity, fill = f
 # as a line graph #
 ggplot(shrub_fire_emissions_asia, aes(year, emissions_quantity, color = iso3_country)) + 
   geom_line() +
-  geom_point() +  
+  geom_point() +
+  scale_color_manual(values = c("darkred", "steelblue3", "antiquewhite4", "lightsteelblue3", "aquamarine3", "darkslategray4", "pink", "lightgoldenrod1","lightsalmon3", "gold3", "mistyrose4", "maroon", "darkorange", "lightpink3")) +
   labs(x = "Year", y = "Emissions Quantity", title = "Emissions from Shrubgrass Fire by Asian Countries Over Time") +
   theme_minimal()
 
