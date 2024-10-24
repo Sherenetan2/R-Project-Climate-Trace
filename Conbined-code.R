@@ -6,7 +6,7 @@ library(RColorBrewer)
 
 
 # define the path of the folder
-data_folder <- "C:/Users/hasie/Desktop/LKYSPP/SEM3/R programming/group project/data"  # 替换为你的文件夹路径
+data_folder <- "C:/Users/hasie/Desktop/LKYSPP/SEM3/R programming/group project/data"  
 
 # Get all the Excel files in the folder and filter out the files ending with "emissions"
 file_list <- list.files(path = data_folder, pattern = "_emissions\\.csv$", recursive = TRUE, full.names = TRUE)
