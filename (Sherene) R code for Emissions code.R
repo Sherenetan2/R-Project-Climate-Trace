@@ -224,14 +224,14 @@ library(reshape2)
 population_long <- melt(population_data, id.vars = "year", variable.name = "iso3_country", value.name = "population")
 
 # Combining emissions and population data
-totalemissionscountry_data <- merge(totalemissionscountry_data, population_long, by = c("iso3_country", "year"))
+all_emissions_Asia_forgraph <- merge(all_emissions_Asia_forgraph, population_long, by = c("iso3_country", "year"))
 
-# Create a new column to calculate emissions per person which equals to（total_emissions_billion / population）
-totalemissionscountry_data$emissions_per_capita <- totalemissionscountry_data$total_emissions_billion / totalemissionscountry_data$population
+# Create a new column to calculate emissions per person which equals to（total_emissions / population）
+all_emissions_Asia_forgraph$emissions_per_capita <- all_emissions_Asia_forgraph$total_emissions / all_emissions_Asia_forgraph$population
 
-View(totalemissionscountry_data)
+View(all_emissions_Asia_forgraph)
 # calculate the changes in per emissions
-ggplot(totalemissionscountry_data, aes(x = as.numeric(year), y = emissions_per_capita, color = iso3_country, group = iso3_country)) +
+ggplot(all_emissions_Asia_forgraph, aes(x = as.numeric(year), y = emissions_per_capita, color = iso3_country, group = iso3_country)) +
   geom_line(size = 1.5) +  
   geom_point(size = 2.5) +  
   labs(title = "Change in Per Capita Emissions, 2015 - 2022", 
