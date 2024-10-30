@@ -4,7 +4,7 @@ This code can be applied on raw EMISSIONS data (sans sources, confidence and own
 
 The emissions data of different sectors will be joined together to create a master dataset below.
 
-SUGGESTION: You can also view this in R markdown and run the codes in chunks.
+SUGGESTION: You can view this in R markdown and run the codes in chunks.
 
 
 
@@ -100,7 +100,6 @@ all_emissions_graph <- all_emissions %>%
   group_by(iso3_country, year) %>%
   summarize(total_emissions = sum(emissions_quantity_in_billions, na.rm = T))
 
-# Draw the graph to have an overview on emissions fro each country per year
 ggplot(all_emissions_graph, aes(x = year, y = total_emissions, fill = iso3_country)) +
   geom_bar(stat = "identity", position = "dodge") +
   labs(
@@ -144,7 +143,7 @@ ggplot(all_emissions_Asia_US, aes(x = factor(year), y = total_emissions, fill = 
 
 
 
-### Obtaining cumulative emissions for preliminary look ###
+### Obtaining cumulative emissions for a preliminary look ###
 
 # creating a vector to use as filter for case study countries + US for comparison
 casestudy_countries <- c("CHN", "IND", "IDN", "USA")
@@ -209,47 +208,9 @@ ggplot(all_emissions_Asia_forgraph, aes(x = factor(year), y = total_emissions, f
     legend.title = element_text(size = 12)
   )
 
- 
-#### Plotting graph of per capital emissions across ONLY select Asian countries over the years ####
 
-population_data <- data.frame(
-  year = c(2015:2022),
-  CHN = c(1.375, 1.383, 1.390, 1.395, 1.400, 1.410, 1.413, 1.412),
-  IND = c(1.309, 1.324, 1.339, 1.354, 1.369, 1.384, 1.399, 1.415),
-  IDN = c(0.258, 0.261, 0.264, 0.266, 0.270, 0.274, 0.276, 0.279)
-)
+```
 
-# Conversion of population data from wide format to long format
-library(reshape2)
-population_long <- melt(population_data, id.vars = "year", variable.name = "iso3_country", value.name = "population")
-
-# Combining emissions and population data
-totalemissionscountry_data <- merge(totalemissionscountry_data, population_long, by = c("iso3_country", "year"))
-
-# Create a new column to calculate emissions per person which equals to（total_emissions_billion / population）
-totalemissionscountry_data$emissions_per_capita <- totalemissionscountry_data$total_emissions_billion / totalemissionscountry_data$population
-
-View(totalemissionscountry_data)
-# calculate the changes in per emissions
-ggplot(totalemissionscountry_data, aes(x = as.numeric(year), y = emissions_per_capita, color = iso3_country, group = iso3_country)) +
-  geom_line(size = 1.5) +  
-  geom_point(size = 2.5) +  
-  labs(title = "Change in Per Capita Emissions, 2015 - 2022", 
-       x = "Year", 
-       y = "Per Capita Emissions (CO2 per 100 years)",
-       color = "Country") +  
-  scale_x_continuous(breaks = seq(2015, 2022, 1)) +  
-  scale_color_manual(values = c("CHN" = "#8B0000",  
-                                "IND" = "#CDC0B0",  
-                                "IDN" = "lightgoldenrod2")) +  
-  theme_minimal() +  
-  theme(plot.title = element_text(hjust = 0.5, size = 10, face = "bold"),  
-        text = element_text(size = 8), 
-        axis.text.x = element_text(angle = 45, hjust = 1)  
-  )
-
-
- 
 
 #### Calculating Year-on-Year (YoY) change in emissions for select Asian countries ####
 ```{r}
@@ -286,21 +247,27 @@ emissions_top3asia_yoy_change <- all_emissions_Asia %>%
   arrange(iso3_country, year) %>%
   group_by(iso3_country, year) %>%
   summarize(total_emissions = sum(emissions_quantity_in_billions, na.rm = T)) %>%
-  mutate(yearly_change = total_emissions - lag(total_emissions))
+  mutate(
+    yearly_change = total_emissions - lag(total_emissions),
+    yearly_change_percent = (yearly_change / lag(total_emissions)) * 100
+  )
   
-ggplot(emissions_top3asia_yoy_change, aes(x = year, y = yearly_change, color = iso3_country)) +
+ggplot(emissions_top3asia_yoy_change, aes(x = year, y = yearly_change_percent, color = iso3_country)) +
   geom_line(size = 0.5) +
   geom_point(size = 1.5) +
   labs(
-    title = "Year-on-Year Change in Emissions for Asian Countries",
+    title = "Year-on-Year Change in Emissions\nfor Asian Countries",
     x = "Year",
-    y = "Year-on-Year Change in Emissions (tonnes)",
+    y = "Year-on-Year Change in Emissions (%)",
     color = "Country"
   ) +
   scale_colour_manual(values = c("darkred", "antiquewhite3", "goldenrod1")) +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
+  theme(
+    plot.title = element_text(hjust = 0.5, size = 14),
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 10),
+    legend.title = element_text(size = 10)
+  )
 ```
 
 
@@ -328,7 +295,7 @@ Indonesia_agriculture <- emissions_by_sector_Indonesia %>%
 
 ggplot(emissions_by_sector_Indonesia, aes(x = factor(year), y = total_emissions, fill = sector)) +
   geom_bar(stat = "identity") +
-  labs(title = "Indonesia's Emissions by Sector Over the Years\n(in billion tonnes)",
+  labs(title = "Indonesia's Emissions\n(in billion tonnes)",
        x = "Year",
        y = "Total Emissions (CO2 per 100 years)",
        fill = "Sector") +
@@ -356,14 +323,14 @@ ggplot(emissions_by_sector_Indonesia, aes(x = factor(year), y = total_emissions)
 
 
 
-## breakdown of emissions in agriculture in INDONESIA (top-emitting #1):
+## Breakdown of emissions in agriculture in INDONESIA (top-emitting #1):
 
 subsector_agri_emissions_Indonesia <- emissions_by_sector_Indonesia %>%
   filter(sector == "agriculture") 
 
 ggplot(subsector_agri_emissions_Indonesia, aes(x = factor(year), y = total_emissions, fill = subsector)) +
   geom_bar(stat = "identity") +
-  labs(title = "Breakdown of Indonesia's Agricultural Emissions Over the Years\n(in billion tonnes)",
+  labs(title = "Breakdown of Indonesia's Agricultural Emissions\nOver the Years (in billion tonnes)",
        x = "Year",
        y = "Total Emissions (CO2 per 100 years)",
        fill = "Subsector") +
@@ -377,7 +344,7 @@ ggplot(subsector_agri_emissions_Indonesia, aes(x = factor(year), y = total_emiss
 
 
 
-## breakdown of emissions in LULC in INDONESIA (top-emitting #2):
+## Breakdown of emissions in LULC in INDONESIA (top-emitting #2):
 
 all_emissions_indonesia_full <- all_emissions %>%
   mutate(start_time = as.Date(start_time),
@@ -401,7 +368,7 @@ ggplot(subsector_LULC_emissions_Indonesia, aes(x = factor(year), y = total_emiss
   geom_point(data = subset(subsector_LULC_emissions_Indonesia, subsector == "forest-land-clearing"), 
              aes(x = factor(year), y = total_emissions), 
              color = "#C1A2B2", size = 1.5) +  
-  labs(title = "Breakdown of Indonesia's LULC Emissions Over the Years\n(in billion tonnes)",
+  labs(title = "Breakdown of Indonesia's LULC Emissions\nOver the Years (in billion tonnes)",
        x = "Year",
        y = "Total Emissions (CO2 per 100 years)",
        fill = "Subsector") +
@@ -458,7 +425,7 @@ emissions_by_sector_india <- all_emissions_india %>%  #summing emissions across 
 
 ggplot(emissions_by_sector_india, aes(x = factor(year), y = total_emissions, fill = sector)) +
   geom_bar(stat = "identity") +
-  labs(title = "India's Emissions by Sector Over the Years\n(in billion tonnes)",
+  labs(title = "India's Emissions\n(in billion tonnes)",
        x = "Year",
        y = "Total Emissions (CO2 per 100 years)",
        fill = "Sector") +
@@ -480,6 +447,26 @@ ggplot(emissions_by_sector_india, aes(x = factor(year), y = total_emissions)) +
   theme_minimal() +
   theme(
     plot.title = element_text(size = 15),
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 10),
+    legend.title = element_text(size = 12)
+  )
+
+
+## Breakdown of emissions in power in INDONESIA (top-emitting #1):
+
+subsector_energy_emissions_India <- emissions_by_sector_Indonesia %>%
+  filter(sector == "power") 
+
+ggplot(subsector_energy_emissions_India, aes(x = factor(year), y = total_emissions, fill = subsector)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Breakdown of India's Power Emissions\nOver the Years (in billion tonnes)",
+       x = "Year",
+       y = "Total Emissions (CO2 per 100 years)",
+       fill = "Subsector") +
+  scale_fill_manual(values = c("slategray1", "slategray")) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 17),
     axis.text.x = element_text(angle = 45, hjust = 1, size = 10),
     legend.title = element_text(size = 12)
   )
@@ -507,7 +494,7 @@ emissions_by_sector_China <- all_emissions_China %>%  #summing emissions across 
 
 ggplot(emissions_by_sector_China, aes(x = factor(year), y = total_emissions, fill = sector)) +
   geom_bar(stat = "identity") +
-  labs(title = "China's Emissions by Sector Over the Years\n(in billion tonnes)",
+  labs(title = "China's Emissions\n(in billion tonnes)",
        x = "Year",
        y = "Total Emissions (CO2 per 100 years)") +
   scale_fill_manual(values = c("darkolivegreen4", "steelblue2", "gold", "seashell2", "palevioletred4", "darkslategray4", "maroon", "mistyrose3","lightsalmon2", "gold3", "mistyrose4", "maroon", "darkorange", "lightpink3")) +
